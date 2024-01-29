@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
+""" Simple pagination """
 import csv
 import math
-from typing import Tuple, List
+from typing import List, Tuple
 
 
 def index_range(page: int, page_size: int) -> Tuple[int, int]:
@@ -9,10 +10,7 @@ def index_range(page: int, page_size: int) -> Tuple[int, int]:
         corresponding to the range of indexes to return in a list for those
         particular pagination parameters.
     """
-    start_idx = (page - 1) * page_size
-    end_idx = start_idx + page_size
-
-    return (start_idx, end_idx)
+    return ((page - 1) * page_size, page * page_size)
 
 
 class Server:
@@ -22,6 +20,7 @@ class Server:
 
     def __init__(self):
         self.__dataset = None
+    
 
     def dataset(self) -> List[List]:
         """Cached dataset
@@ -35,16 +34,9 @@ class Server:
         return self.__dataset
 
     def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
+        """ Get page from dataset
         """
-        Retrieve a specific page of data from the dataset.
-        """
-        assert isinstance(page, int) and isinstance(page_size, int)
-        assert page > 0 and page_size > 0
-
-        start_index, end_index = index_range(page, page_size)
-        dataset = self.dataset()
-
-        if start_index >= len(dataset):
-            return []
-
-        return dataset[start_index:min(end_index, len(dataset))]
+        assert type(page) == int and page > 0
+        assert type(page_size) == int and page_size > 0
+        start, end = index_range(page, page_size)
+        return self.dataset()[start:end]
