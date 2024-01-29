@@ -9,7 +9,10 @@ def index_range(page: int, page_size: int) -> Tuple[int, int]:
         corresponding to the range of indexes to return in a list for those
         particular pagination parameters.
     """
-    return ((page - 1) * page_size, page * page_size)
+    start_idx = (page - 1) * page_size
+    end_idx = start_idx + page_size
+
+    return (start_idx, end_idx)
 
 
 class Server:
