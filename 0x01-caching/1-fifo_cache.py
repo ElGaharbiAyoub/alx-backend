@@ -9,20 +9,15 @@ class FIFOCache (BaseCaching):
     def __init__(self):
         """Constructor"""
         super().__init__()
-        self.queue = []
 
     def put(self, key, item):
-        """Add an item in cahce data"""
-        if key is None and item is Nane:
+        """ Add an item in the cache"""
+        if key is None or item is None:
             return
-        if key in self.cache_data:
-            self.cache_data[key] = item
-            return
-        if len(self.cache_data) >= BaseCaching.MAX_ITEMS:
-            discard = self.queue.pop(0)
-            del self.cache_data[discard]
-            print("DISCARD: {}".format(discard))
-        self.queue.append(key)
+        if len(self.cache_data.keys()) >= BaseCaching.MAX_ITEMS:
+            first = list(self.cache_data.keys())[0]
+            print("DISCARD: {}".format(first))
+            self.cache_data.pop(first)
         self.cache_data[key] = item
 
     def get(self, key):
