@@ -24,7 +24,7 @@ class MRUCache (BaseCaching):
         if key in self.last:
             self.last.remove(key)
         self.last.append(key)
-    
+
     def get(self, key):
         """ get an item by key"""
         if key is None or key not in self.cache_data.keys():
