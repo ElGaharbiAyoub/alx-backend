@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """ Basic Babel setup """
 from flask_babel import Babel
+from typing import Union, Dict
 from flask import Flask, render_template, request
 
 
@@ -53,7 +54,7 @@ def get_locale():
 @app.route('/', strict_slashes=False)
 def index():
     """ Returns the index page """
-    return render_template('4-index.html')
+    return render_template('5-index.html')
 
 
 if __name__ == '__main__':
