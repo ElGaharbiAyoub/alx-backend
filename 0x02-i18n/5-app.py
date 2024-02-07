@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """ Basic Babel setup """
 from flask_babel import Babel
-from typing import Union, Dict
+from typing import Union, Dict, List
 from flask import Flask, render_template, request
 
 
@@ -27,14 +27,14 @@ babel = Babel(app)
 
 def get_user() -> Union[Dict, None]:
     """Retrieves a user based on a user id"""
-    login_id = request.args.get('login_as')
-    if login_id:
-        return users.get(int(login_id))
+    id = request.args.get('login_as', None)
+    if id is not None and int(id) in users.keys():
+        return users.get(int(id))
     return None
 
 
 @app.before_request
-def before_request():
+def before_request() -> None:
     """
     Add user to flask.g if user is found
     """
@@ -43,7 +43,7 @@ def before_request():
 
 
 @babel.localeselector
-def get_locale():
+def get_locale() -> str:
     """Retrieves the locale for a web page"""
     loc = request.args.get('locale')
     if loc in app.config['LANGUAGES']:
@@ -52,7 +52,7 @@ def get_locale():
 
 
 @app.route('/', strict_slashes=False)
-def index():
+def index() -> str:
     """ Returns the index page """
     return render_template('5-index.html')
 
