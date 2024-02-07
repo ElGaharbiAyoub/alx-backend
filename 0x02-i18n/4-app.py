@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """ Basic Babel setup """
 from flask_babel import Babel
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 
 
-class Config:
+class Config(object):
     """ Config class """
     LANGUAGES = ["en", "fr"]
     BABEL_DEFAULT_LOCALE = "en"
@@ -17,17 +17,13 @@ babel = Babel(app)
 
 
 @babel.localeselector
-def get_locale() -> str:
+def get_locale():
     """Retrieves the locale for a web page"""
-    queries = request.query_string.decode('utf-8').split('&')
-    query_table = dict(map(
-        lambda x: (x if '=' in x else '{}='.format(x)).split('='),
-        queries,
-    ))
-    if 'locale' in query_table:
-        if query_table['locale'] in app.config["LANGUAGES"]:
-            return query_table['locale']
-    return request.accept_languages.best_match(app.config["LANGUAGES"])
+    loc = request.args.get('locale')
+    if loc in app.config['LANGUAGES']:
+        return loc
+    return request.accept_languages.best_match(app.config['LANGUAGES'])
+
 
 @app.route('/', strict_slashes=False)
 def index():
